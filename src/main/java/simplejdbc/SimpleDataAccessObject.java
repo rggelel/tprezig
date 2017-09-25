@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 public class SimpleDataAccessObject {
@@ -24,48 +26,52 @@ public class SimpleDataAccessObject {
 	/**
 	 *
 	 * @return le nombre d'enregistrements dans la table CUSTOMER
-	 * @throws SQLException
+	 * @throws DAOException
 	 */
-	public int numberOfCustomers() throws SQLException {
+	public int numberOfCustomers() throws DAOException {
 		int result = 0;
 
 		String sql = "SELECT COUNT(*) AS NUMBER FROM CUSTOMER";
-                // Syntaxe "try with resources" 
-                // cf. https://stackoverflow.com/questions/22671697/try-try-with-resources-and-connection-statement-and-resultset-closing
-		try ( 	Connection connection = myDataSource.getConnection(); // Ouvrir une connexion
+		// Syntaxe "try with resources" 
+		// cf. https://stackoverflow.com/questions/22671697/try-try-with-resources-and-connection-statement-and-resultset-closing
+		try (Connection connection = myDataSource.getConnection(); // Ouvrir une connexion
 			Statement stmt = connection.createStatement(); // On crée un statement pour exécuter une requête
 			ResultSet rs = stmt.executeQuery(sql) // Un ResultSet pour parcourir les enregistrements du résultat
-                ) {
+			) {
 			if (rs.next()) { // Pas la peine de faire while, il y a 1 seul enregistrement
 				// On récupère le champ NUMBER de l'enregistrement courant
 				result = rs.getInt("NUMBER");
 			}
+		} catch (SQLException ex) {
+			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+			throw new DAOException(ex.getMessage());
 		}
 
 		return result;
 	}
-    
-        
+
 	/**
 	 *
 	 * @param customerId la clé du client à recherche
 	 * @return le nombre de bons de commande pour ce client (table PURCHASE_ORDER)
-	 * @throws SQLException
+	 * @throws DAOException
 	 */
-	public int numberOfOrdersForCustomer(int customerId) throws SQLException {
+	public int numberOfOrdersForCustomer(int customerId) throws DAOException {
 		int result = 0;
 
 		// Une requête SQL paramétrée
 		String sql = "SELECT COUNT(*) AS NUMBER FROM PURCHASE_ORDER WHERE CUSTOMER_ID = ?";
-		try ( Connection connection = myDataSource.getConnection(); 
-                      PreparedStatement stmt = connection.prepareStatement(sql)
-		) {
+		try (Connection connection = myDataSource.getConnection();
+			PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setInt(1, customerId);
 
-			try ( ResultSet rs = stmt.executeQuery() ) {                          
+			try (ResultSet rs = stmt.executeQuery()) {
 				rs.next(); // On a toujours exactement 1 enregistrement dans le résultat
-                                result = rs.getInt("NUMBER"); 
-                        }
+				result = rs.getInt("NUMBER");
+			}
+		}  catch (SQLException ex) {
+			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+			throw new DAOException(ex.getMessage());
 		}
 		return result;
 	}
@@ -75,17 +81,17 @@ public class SimpleDataAccessObject {
 	 *
 	 * @param customerID la clé du CUSTOMER à rechercher
 	 * @return l'enregistrement correspondant dans la table CUSTOMER, ou null si pas trouvé
-	 * @throws SQLException
+	 * @throws DAOException
 	 */
-	public CustomerEntity findCustomer(int customerID) throws SQLException {
+	public CustomerEntity findCustomer(int customerID) throws DAOException {
 		CustomerEntity result = null;
-		
+
 		String sql = "SELECT * FROM CUSTOMER WHERE CUSTOMER_ID = ?";
-		try ( Connection connection = myDataSource.getConnection(); // On crée un statement pour exécuter une requête
-		      PreparedStatement stmt = connection.prepareStatement(sql)) {
-			
+		try (Connection connection = myDataSource.getConnection(); // On crée un statement pour exécuter une requête
+			PreparedStatement stmt = connection.prepareStatement(sql)) {
+
 			stmt.setInt(1, customerID);
-			try ( ResultSet rs = stmt.executeQuery()) {
+			try (ResultSet rs = stmt.executeQuery()) {
 				if (rs.next()) { // On a trouvé
 					String name = rs.getString("NAME");
 					String address = rs.getString("ADDRESSLINE1");
@@ -93,6 +99,9 @@ public class SimpleDataAccessObject {
 					result = new CustomerEntity(customerID, name, address);
 				} // else on n'a pas trouvé, on renverra null
 			}
+		}  catch (SQLException ex) {
+			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+			throw new DAOException(ex.getMessage());
 		}
 
 		return result;
@@ -103,15 +112,15 @@ public class SimpleDataAccessObject {
 	 *
 	 * @param state l'état à rechercher (2 caractères)
 	 * @return la liste des clients habitant dans cet état
-	 * @throws SQLException
+	 * @throws DAOException
 	 */
-	public List<CustomerEntity> customersInState(String state) throws SQLException {
+	public List<CustomerEntity> customersInState(String state) throws DAOException {
 		List<CustomerEntity> result = new LinkedList<>(); // Liste vIde
 
 		String sql = "SELECT * FROM CUSTOMER WHERE STATE = ?";
-		try ( Connection connection = myDataSource.getConnection(); 
-		      PreparedStatement stmt = connection.prepareStatement(sql)) {
-			
+		try (Connection connection = myDataSource.getConnection();
+			PreparedStatement stmt = connection.prepareStatement(sql)) {
+
 			stmt.setString(1, state);
 
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -126,6 +135,9 @@ public class SimpleDataAccessObject {
 					result.add(c);
 				}
 			}
+		}  catch (SQLException ex) {
+			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+			throw new DAOException(ex.getMessage());
 		}
 
 		return result;

@@ -23,7 +23,7 @@ public class SimpleDataAccessObjectTest {
 	 * @throws java.sql.SQLException
 	 */
 	@Test
-	public void testNumberOfCustomers() throws SQLException {
+	public void testNumberOfCustomers() throws DAOException {
 		int result = myDAO.numberOfCustomers();
 		assertEquals(13, result);
 	}
@@ -33,7 +33,7 @@ public class SimpleDataAccessObjectTest {
 	 * @throws java.sql.SQLException
 	 */
 	@Test
-	public void testNumberOfOrdersForCustomer() throws SQLException {
+	public void testNumberOfOrdersForCustomer() throws DAOException {
 		int customerId = 36;
 		int expResult = 2;
 		int result = myDAO.numberOfOrdersForCustomer(customerId);
@@ -45,7 +45,7 @@ public class SimpleDataAccessObjectTest {
 	 * @throws java.sql.SQLException
 	 */
 	@Test
-	public void testFindCustomer() throws SQLException {
+	public void testFindCustomer() throws DAOException {
 		int customedID = 1;
 		CustomerEntity result = myDAO.findCustomer(customedID);
 		assertEquals("Jumbo Eagle Corp", result.getName());
@@ -56,7 +56,7 @@ public class SimpleDataAccessObjectTest {
 	 * @throws java.sql.SQLException
 	 */
 	@Test
-	public void testCustomersInState() throws SQLException {
+	public void testCustomersInState() throws DAOException {
 		String state = "CA";
 		List<CustomerEntity> result = myDAO.customersInState(state);
 		assertEquals(4, result.size());
