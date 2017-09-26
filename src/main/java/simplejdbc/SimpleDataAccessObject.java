@@ -34,10 +34,10 @@ public class SimpleDataAccessObject {
 		String sql = "SELECT COUNT(*) AS NUMBER FROM CUSTOMER";
 		// Syntaxe "try with resources" 
 		// cf. https://stackoverflow.com/questions/22671697/try-try-with-resources-and-connection-statement-and-resultset-closing
-		try (Connection connection = myDataSource.getConnection(); // Ouvrir une connexion
+		try (   Connection connection = myDataSource.getConnection(); // Ouvrir une connexion
 			Statement stmt = connection.createStatement(); // On crée un statement pour exécuter une requête
 			ResultSet rs = stmt.executeQuery(sql) // Un ResultSet pour parcourir les enregistrements du résultat
-			) {
+		) {
 			if (rs.next()) { // Pas la peine de faire while, il y a 1 seul enregistrement
 				// On récupère le champ NUMBER de l'enregistrement courant
 				result = rs.getInt("NUMBER");
@@ -61,8 +61,10 @@ public class SimpleDataAccessObject {
 
 		// Une requête SQL paramétrée
 		String sql = "SELECT COUNT(*) AS NUMBER FROM PURCHASE_ORDER WHERE CUSTOMER_ID = ?";
-		try (Connection connection = myDataSource.getConnection();
-			PreparedStatement stmt = connection.prepareStatement(sql)) {
+		try (   Connection connection = myDataSource.getConnection();
+			PreparedStatement stmt = connection.prepareStatement(sql)
+                ) {
+                        // Définir la valeur du paramètre
 			stmt.setInt(1, customerId);
 
 			try (ResultSet rs = stmt.executeQuery()) {
