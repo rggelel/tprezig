@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 
 public class SimpleDataAccessObject {
 
-	private final DataSource myDataSource;
+	protected final DataSource myDataSource;
 
 	/**
 	 *
