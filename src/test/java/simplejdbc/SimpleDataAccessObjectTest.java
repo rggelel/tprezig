@@ -20,7 +20,7 @@ public class SimpleDataAccessObjectTest {
 	
 	/**
 	 * Test of numberOfCustomers method, of class SimpleDataAccessObject.
-	 * @throws java.sql.SQLException
+	 * @throws simplejdbc.DAOException
 	 */
 	@Test
 	public void testNumberOfCustomers() throws DAOException {
@@ -30,7 +30,7 @@ public class SimpleDataAccessObjectTest {
 
 	/**
 	 * Test of numberOfOrdersForCustomer method, of class SimpleDataAccessObject.
-	 * @throws java.sql.SQLException
+	 * @throws simplejdbc.DAOException
 	 */
 	@Test
 	public void testNumberOfOrdersForCustomer() throws DAOException {
@@ -42,7 +42,7 @@ public class SimpleDataAccessObjectTest {
 
 	/**
 	 * Test of findCustomer method, of class SimpleDataAccessObject.
-	 * @throws java.sql.SQLException
+	 * @throws simplejdbc.DAOException
 	 */
 	@Test
 	public void testFindCustomer() throws DAOException {
@@ -53,7 +53,7 @@ public class SimpleDataAccessObjectTest {
 
 	/**
 	 * Test of customersInState method, of class SimpleDataAccessObject.
-	 * @throws java.sql.SQLException
+	 * @throws simplejdbc.DAOException
 	 */
 	@Test
 	public void testCustomersInState() throws DAOException {
