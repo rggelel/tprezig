@@ -2,9 +2,16 @@
 <actions>
         <action>
             <actionName>CUSTOM-javadoc</actionName>
-            <displayName>javadoc</displayName>
+            <displayName>Génération des javadoc</displayName>
             <goals>
                 <goal>javadoc:javadoc</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-Génération du site</actionName>
+            <displayName>Génération du site</displayName>
+            <goals>
+                <goal>site:site</goal>
             </goals>
         </action>
     </actions>
