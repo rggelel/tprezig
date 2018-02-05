@@ -51,6 +51,30 @@ public class DAO {
 	}
 
 	/**
+	 * Detruire un enregistrement dans la table CUSTOMER
+	 * @param customerId la clé du client à détruire
+	 * @return le nombre d'enregistrements détruits (1 ou 0 si pas trouvé)
+	 * @throws DAOException
+	 */
+	public int deleteCustomer(int customerId) throws DAOException {
+
+		// Une requête SQL paramétrée
+		String sql = "DELETE FROM CUSTOMER WHERE CUSTOMER_ID = ?";
+		try (   Connection connection = myDataSource.getConnection();
+			PreparedStatement stmt = connection.prepareStatement(sql)
+                ) {
+                        // Définir la valeur du paramètre
+			stmt.setInt(1, customerId);
+			
+			return stmt.executeUpdate();
+
+		}  catch (SQLException ex) {
+			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+			throw new DAOException(ex.getMessage());
+		}
+	}
+	
+	/**
 	 *
 	 * @param customerId la clé du client à recherche
 	 * @return le nombre de bons de commande pour ce client (table PURCHASE_ORDER)

@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class DAOTest {
 	private DAO myDAO; // L'objet à tester
@@ -60,6 +61,40 @@ public class DAOTest {
 		String state = "CA";
 		List<CustomerEntity> result = myDAO.customersInState(state);
 		assertEquals(4, result.size());
+	}
+
+	/**
+	 * Test of deleteCustomer method, of class DAO.
+	 * @throws simplejdbc.DAOException
+	 */
+	@Test
+	public void testDeleteUnknownCustomer () throws DAOException {
+		int id = 999;
+		assertEquals(0, myDAO.deleteCustomer(id));
+	}
+
+	/**
+	 * Test of deleteCustomer method, of class DAO.
+	 * @throws simplejdbc.DAOException
+	 */
+	@Test @Ignore
+	public void testDeleteCustomerWithoutOrder () throws DAOException {
+		int id = 25; // Le client 25 n'a pas de bon de commande
+		assertEquals(1, myDAO.deleteCustomer(id));
+	}
+
+	/**
+	 * Test of deleteCustomer method, of class DAO.
+	 */
+	@Test
+	public void testDeleteCustomerWithOrder () {
+		int id = 1; // Le client 1 a des bons de commande
+		try {
+			myDAO.deleteCustomer(id); // Cette ligne doit lever une exception
+			fail(); // On ne doit pas passer par ici
+		} catch (DAOException e) {
+			// On doit passer par ici, violation d'intégrité référentielle
+		}
 	}
 	
 }
