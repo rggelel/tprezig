@@ -22,7 +22,7 @@ import simplejdbc.DataSourceFactory;
 
 /**
  *
- * @author nvollhes
+ * @author greziz
  */
 @WebServlet(name = "StateChoise", urlPatterns = {"/StateChoise"})
 public class StateChoise extends HttpServlet {
