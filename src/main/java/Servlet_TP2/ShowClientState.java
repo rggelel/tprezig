@@ -21,7 +21,7 @@ import simplejdbc.DataSourceFactory;
 
 /**
  *
- * @author nvollhes
+ * @author greziz
  */
 @WebServlet(name = "ShowClientState", urlPatterns = {"/ShowClientState"})
 public class ShowClientState extends HttpServlet {
