@@ -18,7 +18,7 @@ import simplejdbc.*;
 
 /**
  *
- * @author nvollhe
+ * @author greziz
  */
 @WebServlet(name = "AfficherClient", urlPatterns = {"/AfficherClient"})
 public class AfficherClient extends HttpServlet {
